@@ -1,0 +1,12 @@
+# Claude Code settings files - may contain sensitive tokens
+.claude/settings.local.json
+
+# IDE configs
+.idea/
+
+# OS files
+.DS_Store
+
+# Backup files
+*.bak
+*.backup

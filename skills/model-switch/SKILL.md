@@ -20,9 +20,16 @@ The user invokes this skill by typing `/model_switch`.
 ## Flow
 
 1. Read `~/.claude/model-profiles.json` to get the list of providers and their models.
-2. Present the provider list to the user as a numbered choice. Wait for selection.
-3. Present the model list under the selected provider. Wait for selection.
-4. Ask for scope: **project-level** (default, writes to current working directory's `.claude/settings.local.json`) or **global** (writes to `~/.claude/settings.json`).
+2. **Select provider:** Use `AskUserQuestion` with a single-select question. Each option's label is the provider name, description shows the model count. The user navigates with keyboard arrow keys and presses Enter to confirm.
+3. **Select model:** Print the full list of models under the selected provider as a numbered list (e.g., `1. qwen3.6-plus`). Do NOT use `AskUserQuestion` here — it caps at 4 options and would truncate the list. Ask the user to type the model name or number. Wait for input, then validate it matches exactly.
+4. **Determine scope recommendation and show current state:**
+   - Run `bash <skill-directory>/scripts/show-scope-status.sh <project_path>` to display current provider/model at each scope level.
+   - Determine recommendation:
+     - If `<project>/.claude/settings.local.json` exists and contains an `env` block → recommend **project-level** scope (project already has its own override).
+     - Otherwise → default recommendation is **project-level** (new scope, recommended to avoid affecting other projects).
+   - Use `AskUserQuestion` to ask for scope, with the recommendation as the first option (marked "(Recommended)"). Options:
+     - `project` — writes to `<project>/.claude/settings.local.json`
+     - `global` — writes to `~/.claude/settings.json`
 5. Execute the switch script:
    ```
    bash <skill-directory>/scripts/switch-model.sh <provider_name> <model_name> <scope> <project_path>
@@ -39,10 +46,17 @@ The user invokes this skill by typing `/model_switch`.
 - `$4` project path (absolute path to current working directory)
 
 The script:
-- Reads provider config from `~/.claude/model-profiles.json`
+- Reads provider config from `~/.claude/model-profiles.json` in a single `jq` call (base_url, auth_token, model validation)
 - Writes `env` block (`ANTHROPIC_MODEL`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`) to the target settings file
 - Preserves all other fields in the settings file
 - Returns error if provider/model not found
+
+`scripts/show-scope-status.sh` accepts one argument:
+- `$1` project path (absolute path to current working directory)
+
+The script:
+- Reads current `env.ANTHROPIC_MODEL` from project and global settings files
+- Prints a human-readable status summary to stdout
 
 ## Error Handling
 

@@ -21,20 +21,28 @@ if [[ "$SCOPE" != "project" && "$SCOPE" != "global" ]]; then
   exit 1
 fi
 
-# Lookup provider in profiles
-BASE_URL=$(jq -r --arg p "$PROVIDER_NAME" '.providers[] | select(.name == $p) | .base_url' "$PROFILES_FILE")
-AUTH_TOKEN=$(jq -r --arg p "$PROVIDER_NAME" '.providers[] | select(.name == $p) | .auth_token' "$PROFILES_FILE")
+# Lookup provider config and validate model in a single jq call
+READ_RESULT=$(jq -r --arg p "$PROVIDER_NAME" --arg m "$MODEL_NAME" '
+  .providers[] | select(.name == $p)
+  | { base_url: .base_url, auth_token: .auth_token, model_exists: (.models | index($m) != null) }
+  | [.base_url, .auth_token, (.model_exists | tostring)] | join("\t")
+' "$PROFILES_FILE")
+
+if [[ -z "$READ_RESULT" ]]; then
+  echo "ERROR: provider '$PROVIDER_NAME' not found in profiles"
+  exit 1
+fi
+
+BASE_URL=$(echo "$READ_RESULT" | cut -f1)
+AUTH_TOKEN=$(echo "$READ_RESULT" | cut -f2)
+MODEL_EXISTS=$(echo "$READ_RESULT" | cut -f3)
 
 if [[ -z "$BASE_URL" || "$BASE_URL" == "null" ]]; then
   echo "ERROR: provider '$PROVIDER_NAME' not found in profiles"
   exit 1
 fi
 
-# Validate model exists under this provider
-MODEL_EXISTS=$(jq -r --arg p "$PROVIDER_NAME" --arg m "$MODEL_NAME" \
-  '.providers[] | select(.name == $p) | .models | index($m) // empty' "$PROFILES_FILE")
-
-if [[ -z "$MODEL_EXISTS" ]]; then
+if [[ "$MODEL_EXISTS" != "true" ]]; then
   echo "ERROR: model '$MODEL_NAME' not found under provider '$PROVIDER_NAME'"
   exit 1
 fi
@@ -53,6 +61,19 @@ fi
 if [[ ! -f "$TARGET_FILE" ]]; then
   echo "ERROR: settings file not found at $TARGET_FILE"
   exit 1
+fi
+
+# Security check: warn if target file might be tracked by git
+if [[ "$SCOPE" == "project" ]]; then
+  GIT_DIR="$PROJECT_PATH/.git"
+  if [[ -d "$GIT_DIR" ]]; then
+    REL_PATH=".claude/settings.local.json"
+    # Check if file is tracked or would be tracked
+    if git -C "$PROJECT_PATH" ls-files --error-unmatch "$REL_PATH" 2>/dev/null; then
+      echo "WARN: $REL_PATH is tracked by git! Auth token may be committed."
+      echo "  Consider adding '.claude/settings.local.json' to .gitignore"
+    fi
+  fi
 fi
 
 # Write env block, preserving other fields
