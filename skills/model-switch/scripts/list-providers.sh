@@ -6,9 +6,21 @@ set -euo pipefail
 
 PROFILES_FILE="$HOME/.claude/model-profiles.json"
 
+# Auto-init profiles if missing
 if [[ ! -f "$PROFILES_FILE" ]]; then
-  echo "ERROR: model profiles not found at $PROFILES_FILE"
-  exit 1
+  INIT_SCRIPT="$(dirname "$0")/init-profiles.sh"
+  if [[ -f "$INIT_SCRIPT" ]]; then
+    # For --list and --models, we need project path. Use CWD as default.
+    bash "$INIT_SCRIPT" "$(pwd)"
+    if [[ ! -f "$PROFILES_FILE" ]]; then
+      echo "ERROR: initialization failed — profiles file still not created"
+      exit 1
+    fi
+  else
+    echo "ERROR: model profiles not found at $PROFILES_FILE"
+    echo "  init-profiles.sh not found at $INIT_SCRIPT"
+    exit 1
+  fi
 fi
 
 case "${1:---list}" in
@@ -27,10 +39,16 @@ case "${1:---list}" in
       echo "ERROR: --models requires a provider name"
       exit 1
     fi
-    # Output: one model name per line
+    # Check if provider exists
+    PROVIDER_EXISTS=$(jq -r --arg p "$PROVIDER" '[.providers[] | select(.name == $p)] | length' "$PROFILES_FILE")
+    if [[ "$PROVIDER_EXISTS" -eq 0 ]]; then
+      echo "ERROR: provider '$PROVIDER' not found"
+      exit 1
+    fi
+    # Output: one model name per line (may be empty if provider has no models)
     MODELS=$(jq -r --arg p "$PROVIDER" '.providers[] | select(.name == $p) | .models[]' "$PROFILES_FILE")
     if [[ -z "$MODELS" ]]; then
-      echo "ERROR: provider '$PROVIDER' not found"
+      echo "WARN: provider '$PROVIDER' has no models configured"
       exit 1
     fi
     echo "$MODELS"
