@@ -13,7 +13,7 @@
 [![jq](https://img.shields.io/badge/depends-jq-blue.svg)](https://stedolan.github.io/jq/)
 
 > **Stop typing `ANTHROPIC_MODEL=foo ANTHROPIC_BASE_URL=bar` by hand.**
-> One slash command. Three prompts. Done.
+> A Claude Code skill. One slash command. Three prompts. Done.
 
 [English](#) | [中文](README.zh-CN.md)
 
@@ -76,16 +76,40 @@ $ /model_switch
 - [jq](https://stedolan.github.io/jq/) >= 1.6 — the only dependency, we promise
 - macOS or Linux (Windows users: WSL exists for a reason, don't be a hero)
 
-### Setup
+### What This Is
 
-1. **Install the plugin:**
+This is a **Claude Code skill** — a `SKILL.md` + shell scripts combo that exposes `/model_switch`. You install it like any other local skill, not a plugin.
+
+### Setup (One Command)
+
+#### Option A: Install via Claude Code CLI (Recommended)
+
+The easiest way — no git clone, no file copying:
+
+```
+/skill install https://github.com/devotion-coding/claude-code-model-selector-plugin
+```
+
+That's it. Claude Code handles everything: downloads the repo, copies the skill to `~/.claude/skills/`, and makes `/model_switch` available immediately.
+
+#### Option B: Manual Install (git clone + copy)
+
+1. **Copy the skill to your local skills directory:**
 
    ```bash
-   # Option A: Symlink (recommended for developers)
-   ln -s /path/to/this/repo ~/.claude/plugins/claude-code-model-selector-plugin
+   # Clone the repo first (if you haven't)
+   git clone https://github.com/yourusername/claude-code-model-selector-plugin.git ~/claude-code-model-selector-plugin
 
-   # Option B: Direct clone
-   git clone https://github.com/yourusername/claude-code-model-selector-plugin.git ~/.claude/plugins/claude-code-model-selector-plugin
+   # Install the skill
+   mkdir -p ~/.claude/skills
+   cp -r ~/claude-code-model-selector-plugin/skills/model-switch ~/.claude/skills/
+   ```
+
+   Or symlink for development (skill auto-updates when you edit the repo):
+
+   ```bash
+   mkdir -p ~/.claude/skills
+   ln -s ~/claude-code-model-selector-plugin/skills/model-switch ~/.claude/skills/model-switch
    ```
 
 2. **Verify jq is installed:**
@@ -94,7 +118,15 @@ $ /model_switch
    jq --version  # should print jq-1.6 or higher
    ```
 
-3. **Create the provider registry** — see [Configuration](#configuration) below.
+3. **Verify the skill is installed:**
+
+   ```bash
+   ls ~/.claude/skills/model-switch/SKILL.md
+   ```
+
+   If the file exists, you're good. If not, check your copy/symlink command.
+
+4. **Create the provider registry** — see [Configuration](#configuration) below.
 
 ---
 

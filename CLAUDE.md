@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Claude Code 模型切换插件，通过 `/model_switch` 斜杠命令在 AI 提供商和模型之间切换。支持多提供商（每个提供商含多个模型），作用于项目级或全局级别。
+Claude Code 模型切换 skill，通过 `/model_switch` 斜杠命令在 AI 提供商和模型之间切换。支持多提供商（每个提供商含多个模型），作用于项目级或全局级别。
 
 ## 目录结构
 
