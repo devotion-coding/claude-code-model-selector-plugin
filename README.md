@@ -76,57 +76,17 @@ $ /model_switch
 - [jq](https://stedolan.github.io/jq/) >= 1.6 — the only dependency, we promise
 - macOS or Linux (Windows users: WSL exists for a reason, don't be a hero)
 
-### What This Is
+### Install
 
-This is a **Claude Code skill** — a `SKILL.md` + shell scripts combo that exposes `/model_switch`. You install it like any other local skill, not a plugin.
+This is a **Claude Code skill** — a `SKILL.md` + shell scripts combo that exposes `/model_switch`. Install it like any other local skill, not a plugin.
 
-### Setup (One Command)
+**The easiest way** — send this in your Claude Code conversation:
 
-#### Option A: Install via Claude Code CLI (Recommended)
+> Install this skill https://github.com/devotion-coding/claude-code-model-selector-plugin
 
-The easiest way — no git clone, no file copying:
+Claude Code will handle everything: download the repo, copy the skill to `~/.claude/skills/`, and make `/model_switch` available immediately.
 
-```
-/skill install https://github.com/devotion-coding/claude-code-model-selector-plugin
-```
-
-That's it. Claude Code handles everything: downloads the repo, copies the skill to `~/.claude/skills/`, and makes `/model_switch` available immediately.
-
-#### Option B: Manual Install (git clone + copy)
-
-1. **Copy the skill to your local skills directory:**
-
-   ```bash
-   # Clone the repo first (if you haven't)
-   git clone https://github.com/yourusername/claude-code-model-selector-plugin.git ~/claude-code-model-selector-plugin
-
-   # Install the skill
-   mkdir -p ~/.claude/skills
-   cp -r ~/claude-code-model-selector-plugin/skills/model-switch ~/.claude/skills/
-   ```
-
-   Or symlink for development (skill auto-updates when you edit the repo):
-
-   ```bash
-   mkdir -p ~/.claude/skills
-   ln -s ~/claude-code-model-selector-plugin/skills/model-switch ~/.claude/skills/model-switch
-   ```
-
-2. **Verify jq is installed:**
-
-   ```bash
-   jq --version  # should print jq-1.6 or higher
-   ```
-
-3. **Verify the skill is installed:**
-
-   ```bash
-   ls ~/.claude/skills/model-switch/SKILL.md
-   ```
-
-   If the file exists, you're good. If not, check your copy/symlink command.
-
-4. **Create the provider registry** — see [Configuration](#configuration) below.
+For manual installation (git clone + copy), see [MANUAL_INSTALL.md](MANUAL_INSTALL.md).
 
 ---
 

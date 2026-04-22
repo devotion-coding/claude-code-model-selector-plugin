@@ -75,57 +75,17 @@ $ /model_switch
 - [jq](https://stedolan.github.io/jq/) >= 1.6 — 唯一的依赖，就一个
 - macOS 或 Linux（Windows 用户：WSL 是摆设吗，别头铁）
 
-### 这是什么
+### 安装
 
 这是一个 **Claude Code skill**，由一个 `SKILL.md` 定义文件 + 一组 shell 脚本组成，在 Claude Code 中暴露 `/model_switch` 命令。按 skill 的方式安装，不是插件。
 
-### 安装步骤（一条命令搞定）
+**最简单的方式** — 在 Claude Code 对话中直接发送：
 
-#### 方案 A：通过 Claude Code CLI 安装（推荐）
+> 帮我安装这个技能 https://github.com/devotion-coding/claude-code-model-selector-plugin
 
-最简单 — 不用 git clone，不用手动复制：
+Claude Code 会自动下载仓库、复制 skill 到 `~/.claude/skills/`，`/model_switch` 立即可用。
 
-```
-/skill install https://github.com/devotion-coding/claude-code-model-selector-plugin
-```
-
-完事。Claude Code 自动帮你下载仓库、复制 skill 到 `~/.claude/skills/`，`/model_switch` 立即可用。
-
-#### 方案 B：手动安装（git clone + 复制）
-
-1. **将 skill 复制到本地 skills 目录：**
-
-   ```bash
-   # 先克隆仓库（如果没有）
-   git clone https://github.com/yourusername/claude-code-model-selector-plugin.git ~/claude-code-model-selector-plugin
-
-   # 安装 skill
-   mkdir -p ~/.claude/skills
-   cp -r ~/claude-code-model-selector-plugin/skills/model-switch ~/.claude/skills/
-   ```
-
-   开发模式下推荐 symlink（编辑仓库文件后 skill 自动生效）：
-
-   ```bash
-   mkdir -p ~/.claude/skills
-   ln -s ~/claude-code-model-selector-plugin/skills/model-switch ~/.claude/skills/model-switch
-   ```
-
-2. **验证 jq：**
-
-   ```bash
-   jq --version  # 应该输出 jq-1.6 或更高
-   ```
-
-3. **验证 skill 是否安装成功：**
-
-   ```bash
-   ls ~/.claude/skills/model-switch/SKILL.md
-   ```
-
-   文件存在就 OK。不存在说明复制/链接命令有误。
-
-4. **创建提供商注册表** — 看下面的[配置说明](#配置)。
+手动安装（git clone + 复制）请查看 [MANUAL_INSTALL.md](MANUAL_INSTALL.md)。
 
 ---
 
