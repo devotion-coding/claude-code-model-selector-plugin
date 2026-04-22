@@ -119,7 +119,7 @@ bash skills/model-switch/scripts/show-scope-status.sh .
 
 - **无编译代码**：插件纯由声明式文件（SKILL.md）+ Shell 脚本组成
 - **依赖 `jq`**：所有脚本要求系统安装 `jq` >= 1.6
-- **切换后需重启**：用户需运行 `/reset` 使新配置生效
+- **切换后需重启**：用户需重启 Claude Code 客户端使新配置生效（可使用 `/resume` 恢复会话）
 - **作用域优先级**：项目级配置通过 Claude Code 内置 settings 层级覆盖全局配置
 - **自动初始化**：profiles 文件缺失时脚本自动从 settings 初始化，首次使用无需手动创建
 - **安全设计**：密钥始终在脚本内部处理，skill 流程只通过 `list-providers.sh` 获取脱敏数据

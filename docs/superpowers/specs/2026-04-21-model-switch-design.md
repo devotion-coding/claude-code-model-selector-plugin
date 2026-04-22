@@ -31,7 +31,7 @@ Users of Claude Code with third-party providers need to quickly switch between p
 7. User selects scope: project-level (default) or global
 8. Skill calls `switch-model.sh <provider> <model> <scope> <project_path>`
 9. Script reads provider config internally, writes `env` block to target settings file
-10. Informs user to run `/reset` for changes to take effect
+10. Informs user to restart Claude Code for changes to take effect
 
 ## Plugin Structure
 
@@ -74,7 +74,7 @@ Accepts: `<project_path>`
 
 ## Constraints
 
-- Changes require `/reset` to take effect (Claude Code reads env at session start)
+- Changes require restarting Claude Code to take effect (Claude Code reads env at session start)
 - Must preserve existing non-env fields in settings files
 - Must validate provider/model exist in profiles before writing
 - File permissions: settings files created with `chmod 600`

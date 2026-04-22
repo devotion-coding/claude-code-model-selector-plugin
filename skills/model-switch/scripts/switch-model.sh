@@ -98,4 +98,5 @@ chmod 600 "$TARGET_FILE"
 
 echo "OK: switched to $PROVIDER_NAME/$MODEL_NAME ($SCOPE scope)"
 echo "  Settings written to: $TARGET_FILE"
-echo "  Run /reset to apply the new configuration."
+echo "  Restart Claude Code to apply the new configuration."
+echo "  Tip: use /resume to restore your current session."

@@ -37,7 +37,7 @@
 - **每个提供商多个模型** — 一个模型哪够啊，成年人全都要
 - **项目级 or 全局作用域** — 项目级默认（git 忽略，安全），全局级摸鱼
 - **安全第一** — Auth token 待在配置文件里不出来，我们想看都看不到
-- **一个 `/reset` 搞定** — 重启完事就这么简单
+- **重启客户端即可** — 改完重启就这么简单
 
 ---
 
@@ -60,7 +60,7 @@ $ /model_switch
     全局级 (~/.claude/settings.json)
 
   ✅ 已切换到 bailian/qwen3.6-plus (项目级)
-  运行 /reset 使新配置生效
+  请重启 Claude Code 客户端使新配置生效（可使用 `/resume` 恢复当前会话）
 ```
 
 **就这？** 你以前手动改文件就是为了这？
@@ -95,7 +95,7 @@ Claude Code 会自动下载仓库、复制 skill 到 `~/.claude/skills/`，`/mod
 
 1. 在 Claude Code 里敲 `/model_switch`
 2. 选提供商、选模型、选作用域
-3. 跑 `/reset`
+3. 重启 Claude Code 客户端（可使用 `/resume` 恢复会话）
 
 **完事。去卷。**
 
@@ -173,7 +173,7 @@ chmod 600 .claude/settings.local.json
 | `jq: command not found` | `brew install jq` (macOS) 或 `apt-get install jq` (Linux) |
 | `profiles file not found` | 创建 `~/.claude/model-profiles.json` 或运行 `init-profiles.sh` 初始化 |
 | 没有现有 profiles | 运行 `bash skills/model-switch/scripts/init-profiles.sh` 从当前 settings 初始化 |
-| 切换后没生效 | 跑一下 `/reset`，Claude Code 需要重启才能读取新的环境变量 |
+| 切换后没生效 | 重启 Claude Code 客户端以读取新的环境变量（可使用 `/resume` 恢复会话） |
 | 提示文件被 git 追踪 | 立刻把 `.claude/settings.local.json` 加到 `.gitignore` |
 
 ### 脚本说明

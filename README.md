@@ -38,7 +38,7 @@ You know that feeling when you:
 - **Multiple models per provider** — Because one model per provider is so 2023
 - **Project or global scope** — Project-level by default (git-ignored, safe), global when you're lazy
 - **Security-first** — Your auth tokens stay in config files, never leak into the chat. We literally cannot see them even if we wanted to.
-- **One `/reset` to rule them all** — Changes take effect after restart. That's it.
+- **Restart after switch** — Changes take effect after restart. That's it.
 
 ---
 
@@ -61,7 +61,7 @@ $ /model_switch
     Global (~/.claude/settings.json)
 
   ✅ Switched to bailian/qwen3.6-plus (project)
-  Run /reset to apply changes
+  Restart Claude Code to apply the new configuration (use /resume to restore your session)
 ```
 
 **That's it.** No restart, no re-auth, no prayer. You were manually editing files for THIS?
@@ -96,7 +96,7 @@ For manual installation (git clone + copy), see [MANUAL_INSTALL.md](MANUAL_INSTA
 
 1. Type `/model_switch` in Claude Code
 2. Pick your provider, model, and scope
-3. Run `/reset`
+3. Restart Claude Code (use `/resume` to restore your session)
 
 **Go forth and switch with the power of a single slash command.**
 
@@ -174,7 +174,7 @@ The scripts auto-set `600` on newly created files and will **warn you loudly** i
 | `jq: command not found` | `brew install jq` (macOS) or `apt-get install jq` (Linux) |
 | `profiles file not found` | Create `~/.claude/model-profiles.json` or run `init-profiles.sh` to bootstrap |
 | `No existing profiles` | Run `bash skills/model-switch/scripts/init-profiles.sh` to initialize from current settings |
-| Switch didn't take effect | Run `/reset` — Claude Code needs a restart to pick up new env vars |
+| Switch didn't take effect | Restart Claude Code to pick up new env vars (use `/resume` to restore session) |
 | Warning about git-tracked file | Add `.claude/settings.local.json` to `.gitignore` immediately |
 
 ### Scripts Reference
