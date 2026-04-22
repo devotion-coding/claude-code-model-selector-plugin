@@ -82,7 +82,9 @@ This is a **Claude Code skill** — a `SKILL.md` + shell scripts combo that expo
 
 **The easiest way** — send this in your Claude Code conversation:
 
-> Install this skill https://github.com/devotion-coding/claude-code-model-selector-plugin
+```
+Install this skill https://github.com/devotion-coding/claude-code-model-selector-plugin
+```
 
 Claude Code will handle everything: download the repo, copy the skill to `~/.claude/skills/`, and make `/model_switch` available immediately.
 

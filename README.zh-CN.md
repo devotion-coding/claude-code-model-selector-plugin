@@ -81,7 +81,9 @@ $ /model_switch
 
 **最简单的方式** — 在 Claude Code 对话中直接发送：
 
-> 帮我安装这个技能 https://github.com/devotion-coding/claude-code-model-selector-plugin
+```
+帮我安装这个技能 https://github.com/devotion-coding/claude-code-model-selector-plugin
+```
 
 Claude Code 会自动下载仓库、复制 skill 到 `~/.claude/skills/`，`/model_switch` 立即可用。
 
